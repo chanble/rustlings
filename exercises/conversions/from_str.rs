@@ -10,7 +10,6 @@ struct Person {
     age: usize,
 }
 
-// I AM NOT DONE
 // Steps:
 // 1. If the length of the provided string is 0, then return an error
 // 2. Split the given string on the commas present in it
@@ -21,6 +20,26 @@ struct Person {
 impl FromStr for Person {
     type Err = String;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        let personInfo :Vec<&str> = s.split(',').collect();
+        if personInfo.len() != 2 {
+            return Err("persion info split error".to_string());
+        }
+        let mut p = Person {
+            name: "default".to_string(),
+            age: 1,
+        };
+
+        let age_result = personInfo[1].parse::<usize>();
+        match age_result {
+            Ok(age) => {
+                p.name = personInfo[0].to_string();
+                p.age = age;
+            },
+            Err(err) => {
+                return Err("parse age error".to_string());
+            },
+        };
+        Ok(p)
     }
 }
 
